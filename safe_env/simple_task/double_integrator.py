@@ -49,8 +49,6 @@ class DoubleIntegrator(BarrierEnv):
         x2_max = np.sqrt(2 * (5 - x1))
         ax.plot(x1, x2_min, color='k')
         ax.plot(x1, x2_max, color='k')
-        rect = Rectangle((-0.5, -0.5), 1, 1, fill=False, linestyle='--', color='k')
-        ax.add_patch(rect)
 
         feasible = (x2_grid >= x2_min) & (x2_grid <= x2_max)
         y_true = feasible * 0 + ~feasible * 1
