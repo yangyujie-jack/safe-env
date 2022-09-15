@@ -2,7 +2,7 @@ import gym
 import numpy as np
 from safety_gym.envs.engine import Engine
 
-from safety_certificate.env.generate_observations import normalize_obs, obs_lidar_pseudo2
+from safe_env.safety_gym.generate_observations import normalize_obs, obs_lidar_pseudo2
 
 
 class MyEngine(Engine):
@@ -21,13 +21,9 @@ class MyEngine(Engine):
 
     def step(self, action):
         feasibility_info = self.get_feasibility_info()
-        barrier = self.get_barrier()
         obs, reward, done, info = super(MyEngine, self).step(action)
-        next_barrier = self.get_barrier()
         info.update({
             **feasibility_info,
-            'barrier': barrier,
-            'next_barrier': next_barrier,
         })
         return obs, reward, done, info
 
@@ -48,24 +44,9 @@ class MyEngine(Engine):
         infeasible = np.min(hazards_dist) <= self.hazards_size
         return {'feasible': feasible, 'infeasible': infeasible}
 
-    def get_barrier(self):
-        robot_pos = self.robot_pos[np.newaxis, :2]
-        robot_vel = self.world.robot_vel()[:2]
-        hazards_pos = np.array(self.hazards_pos)[:, :2]
-        hazards_vec = hazards_pos - robot_pos
-        hazards_dist = np.linalg.norm(hazards_vec, axis=1)
-        hazards_angle = np.arctan2(hazards_vec[:, 1], hazards_vec[:, 0])
-        dist_dot = -robot_vel[0] * np.cos(hazards_angle) - robot_vel[1] * np.sin(hazards_angle)
-        barrier = 0.1 + self.hazards_size ** 2 - hazards_dist ** 2 - 0.1 * dist_dot
-        return np.max(barrier)
-
-    def seed(self, seed=None):
-        super(MyEngine, self).seed(seed)
-        self.action_space.seed(seed)
-
     def plot_map(self, ax):
-        from safety_certificate.env.generate_observations import generate_obs
         from matplotlib.patches import Circle
+        from safe_env.safety_gym.generate_observations import generate_obs
 
         config = {
             **self.config,
@@ -118,21 +99,3 @@ class MyEngine(Engine):
             'x_label': 'x [m]',
             'y_label': 'y [m]',
         }
-
-
-if __name__ == '__main__':
-    from safety_certificate.env.config import point_goal_config
-
-    env = MyEngine(point_goal_config)
-    env.seed(0)
-    np.random.seed(0)
-    obs = env.reset()
-    # print(obs.shape)
-
-    for i in range(100):
-        action = [1, 0]
-        obs, rew, done, info = env.step(action)
-        print(
-            env.robot_pos[:2],
-            env.world.get_sensor('velocimeter')[:2]
-        )

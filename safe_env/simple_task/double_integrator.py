@@ -2,13 +2,12 @@ from typing import Tuple
 
 import gym
 import numpy as np
-from gym.spaces import Box
 
 
 class DoubleIntegrator(gym.Env):
     def __init__(self):
-        self.observation_space = Box(low=-float('inf'), high=float('inf'), shape=(2,), dtype=np.float32)
-        self.action_space = Box(low=-1, high=1, shape=(1,), dtype=np.float32)
+        self.observation_space = gym.spaces.Box(low=-np.inf, high=np.inf, shape=(2,), dtype=np.float32)
+        self.action_space = gym.spaces.Box(low=-1, high=1, shape=(1,), dtype=np.float32)
         self.dt = 0.1
         self.state = None
 

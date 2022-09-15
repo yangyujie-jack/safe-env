@@ -12,14 +12,10 @@ class MyQuadrotor(Quadrotor):
 
     def step(self, action):
         feasibility_info = self.get_feasibility_info()
-        barrier = self.get_barrier()
         obs, rew, done, info = super(MyQuadrotor, self).step(action)
-        next_barrier = self.get_barrier()
         info.update({
             'cost': info['constraint_violation'],
             **feasibility_info,
-            'barrier': barrier,
-            'next_barrier': next_barrier,
         })
         return obs, rew, done, info
 
@@ -29,16 +25,7 @@ class MyQuadrotor(Quadrotor):
         infeasible = abs(x) > 0.5 or abs(z - 1) > 0.5
         return {'feasible': feasible, 'infeasible': infeasible}
 
-    def get_barrier(self):
-        xs, x_dot, zs, z_dot = self.state[:4]
-        bx1 = -0.5 - xs - (xs > -0.5) * 0.2 * x_dot
-        bx2 = xs - 0.5 + (xs < 0.5) * 0.2 * x_dot
-        bz1 = 0.5 - zs - (zs > 0.5) * 0.2 * z_dot
-        bz2 = zs - 1.5 + (zs < 1.5) * 0.2 * z_dot
-        cbf = np.maximum(np.maximum(bx1, bx2), np.maximum(bz1, bz2))
-        return cbf
-
-    def plot_map(self, ax, x_dot=0.5, z_dot=0, theta=0, theta_dot=0):
+    def plot_map(self, ax, x_dot=0.5, z_dot=0):
         from matplotlib.patches import Rectangle
 
         xs = np.linspace(-0.7, 0.7, 101, dtype=np.float32)
@@ -50,8 +37,6 @@ class MyQuadrotor(Quadrotor):
         obs[..., 1] = x_dot
         obs[..., 2] = zs
         obs[..., 3] = z_dot
-        obs[..., 4] = theta
-        obs[..., 5] = theta_dot
 
         rect = Rectangle((-0.5, 0.5), 1.0, 1.0, fill=False, color='k')
         ax.add_patch(rect)

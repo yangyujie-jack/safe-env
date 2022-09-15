@@ -6,14 +6,11 @@ class MyCartPole(CartPole):
     def step(self, action):
         feasible = self.goal_reached()
         infeasible = self.constraint_violated()
-        barrier = self.get_barrier()
         obs, reward, done, info = super(MyCartPole, self).step(action)
         info.update({
             'cost': info['constraint_violation'],
             'feasible': feasible,
             'infeasible': infeasible,
-            'barrier': barrier,
-            'next_barrier': self.get_barrier(),
         })
         return obs, reward, done, info
 
@@ -24,12 +21,6 @@ class MyCartPole(CartPole):
     def constraint_violated(self):
         c_value = self.constraints.get_values(self)
         return self.constraints.is_violated(self, c_value=c_value)
-
-    def get_barrier(self):
-        theta, theta_dot = self.state[2], self.state[3]
-        theta_max, theta_dot_max = 0.2, 0.2
-        cbf = 0.5 * (-1 + theta ** 2 / theta_max ** 2 + theta_dot ** 2 / theta_dot_max ** 2)
-        return cbf
 
     def plot_map(self, ax):
         from matplotlib.patches import Rectangle

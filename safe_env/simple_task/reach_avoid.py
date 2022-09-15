@@ -6,7 +6,7 @@ import numpy as np
 
 class ReachAvoid(gym.Env):
     def __init__(self):
-        self.observation_space = gym.spaces.Box(low=-float('inf'), high=float('inf'), shape=(5,), dtype=np.float32)
+        self.observation_space = gym.spaces.Box(low=-np.inf, high=np.inf, shape=(5,), dtype=np.float32)
         self.action_space = gym.spaces.Box(low=-1, high=1, shape=(2,), dtype=np.float32)
         self.hazard_size = 0.5
         self.dt = 0.1
