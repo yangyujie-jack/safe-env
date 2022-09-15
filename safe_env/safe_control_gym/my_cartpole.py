@@ -16,7 +16,7 @@ class MyCartPole(CartPole):
 
     def goal_reached(self):
         return bool(np.linalg.norm(self.state - self.X_GOAL) <
-                    self.TASK_INFO["stabilization_goal_tolerance"])
+                    self.TASK_INFO['stabilization_goal_tolerance'])
 
     def constraint_violated(self):
         c_value = self.constraints.get_values(self)
