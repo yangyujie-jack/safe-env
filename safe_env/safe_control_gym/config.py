@@ -44,6 +44,27 @@ cartpole_config = {
     'done_on_out_of_bound': False,
 }
 
+cartpole_random_config = {
+    **cartpole_config,
+    'init_state_randomization_info': {
+        'init_x': {
+            'distrib': 'uniform',
+            'low': -0.5,
+            'high': 0.5
+        },
+        'init_theta': {
+            'distrib': 'uniform',
+            'low': -0.2,
+            'high': 0.2
+        },
+        'init_theta_dot': {
+            'distrib': 'uniform',
+            'low': -0.2,
+            'high': 0.2
+        },
+    },
+}
+
 quadrotor_config = {
     'ctrl_freq': 50,
     'pyb_freq': 50,
@@ -111,4 +132,40 @@ quadrotor_config = {
     'quad_type': 2,
     'obs_goal_horizon': 1,
     'done_on_out_of_bound': False,
+}
+
+quadrotor_random_config = {
+    **quadrotor_config,
+    'init_state_randomization_info': {
+        'init_x': {
+            'distrib': 'uniform',
+            'low': -0.5,
+            'high': 0.5
+        },
+        'init_x_dot': {
+            'distrib': 'uniform',
+            'low': -0.5,
+            'high': 0.5
+        },
+        'init_z': {
+            'distrib': 'uniform',
+            'low': 0.5,
+            'high': 1.5
+        },
+        'init_z_dot': {
+            'distrib': 'uniform',
+            'low': -0.5,
+            'high': 0.5
+        },
+        'init_theta': {
+            'distrib': 'uniform',
+            'low': -0.3,
+            'high': 0.3
+        },
+        'init_theta_dot': {
+            'distrib': 'uniform',
+            'low': -0.01,
+            'high': 0.01
+        },
+    },
 }

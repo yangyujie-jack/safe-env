@@ -1,6 +1,7 @@
 import gym
 
-from safe_env.safe_control_gym.config import cartpole_config, quadrotor_config
+from safe_env.safe_control_gym.config import cartpole_config, quadrotor_config, \
+    cartpole_random_config, quadrotor_random_config
 from safe_env.safe_control_gym.my_cartpole import MyCartPole
 from safe_env.safe_control_gym.my_quadrotor import MyQuadrotor
 from safe_env.safety_gym.config import point_goal_config, car_goal_config
@@ -31,9 +32,23 @@ def register():
     )
 
     gym.register(
+        id='CartPole-v1',
+        entry_point=MyCartPole,
+        kwargs=cartpole_random_config,
+        max_episode_steps=10
+    )
+
+    gym.register(
         id='Quadrotor-v0',
         entry_point=MyQuadrotor,
         kwargs=quadrotor_config
+    )
+
+    gym.register(
+        id='Quadrotor-v1',
+        entry_point=MyQuadrotor,
+        kwargs=quadrotor_random_config,
+        max_episode_steps=10
     )
 
     # safety gym
