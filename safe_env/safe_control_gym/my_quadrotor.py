@@ -73,10 +73,3 @@ class MyQuadrotor(Quadrotor):
             'x_label': 'x [m]',
             'y_label': 'z [m]',
         }
-
-
-class MyQuadrotorPretrain(MyQuadrotor):
-    def step(self, action):
-        obs, reward, done, info = super(MyQuadrotorPretrain, self).step(action)
-        done = done or info['feasible']
-        return obs, reward, done, info

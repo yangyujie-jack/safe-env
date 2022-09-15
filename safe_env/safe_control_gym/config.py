@@ -112,39 +112,3 @@ quadrotor_config = {
     'obs_goal_horizon': 1,
     'done_on_out_of_bound': False,
 }
-
-quadrotor_pretrain_config = {
-    **quadrotor_config,
-    'init_state_randomization_info': {
-        'init_x': {
-            'distrib': 'uniform',
-            'low': -0.7,
-            'high': 0.7
-        },
-        'init_x_dot': {
-            'distrib': 'uniform',
-            'low': -1.0,
-            'high': 1.0
-        },
-        'init_z': {
-            'distrib': 'uniform',
-            'low': 0.3,
-            'high': 1.7
-        },
-        'init_z_dot': {
-            'distrib': 'uniform',
-            'low': -1.0,
-            'high': 1.0
-        },
-        'init_theta': {
-            'distrib': 'uniform',
-            'low': -0.5,
-            'high': 0.5
-        },
-        'init_theta_dot': {
-            'distrib': 'uniform',
-            'low': -0.1,
-            'high': 0.1
-        },
-    },
-}

@@ -1,7 +1,3 @@
-import os
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
 point_goal_config = {
     'robot_base': 'xmls/point.xml',
 
