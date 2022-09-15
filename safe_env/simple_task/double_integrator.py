@@ -38,8 +38,6 @@ class DoubleIntegrator(BarrierEnv):
         return {'feasible': feasible, 'infeasible': infeasible}
 
     def plot_map(self, ax):
-        from matplotlib.patches import Rectangle
-
         x1 = np.linspace(-5, 5, 101)
         x2 = np.linspace(-5, 5, 101)
         x1_grid, x2_grid = np.meshgrid(x1, x2)

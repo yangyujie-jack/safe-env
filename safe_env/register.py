@@ -14,7 +14,7 @@ def register():
     gym.register(
         id='DoubleIntegrator-v0',
         entry_point=DoubleIntegrator,
-        max_episode_steps=10
+        max_episode_steps=2
     )
 
     gym.register(
