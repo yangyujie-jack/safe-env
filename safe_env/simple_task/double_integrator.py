@@ -3,8 +3,10 @@ from typing import Tuple
 import gym
 import numpy as np
 
+from safe_env.base import BarrierEnv
 
-class DoubleIntegrator(gym.Env):
+
+class DoubleIntegrator(BarrierEnv):
     def __init__(self):
         self.observation_space = gym.spaces.Box(low=-np.inf, high=np.inf, shape=(2,), dtype=np.float32)
         self.action_space = gym.spaces.Box(low=-1, high=1, shape=(1,), dtype=np.float32)
@@ -53,14 +55,14 @@ class DoubleIntegrator(gym.Env):
         feasible = (x2_grid >= x2_min) & (x2_grid <= x2_max)
         y_true = feasible * 0 + ~feasible * 1
 
-        handcraft_cbf = (x2_grid >= 0) * (x1_grid - 5 + x2_grid) + (x2_grid <= 0) * (-5 - x1_grid - x2_grid)
+        barrier = (x2_grid >= 0) * (x1_grid - 5 + x2_grid) + (x2_grid <= 0) * (-5 - x1_grid - x2_grid)
 
         return {
             'xs': x1_grid,
             'ys': x2_grid,
             'obs': obs,
             'y_true': y_true,
-            'handcraft_cbf': handcraft_cbf,
+            'handcraft_barrier': barrier,
             'x_label': 'x [m]',
             'y_label': 'v [m/s]',
         }

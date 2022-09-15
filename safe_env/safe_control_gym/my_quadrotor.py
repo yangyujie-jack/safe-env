@@ -1,9 +1,12 @@
 import gym
+import jax.numpy as jnp
 import numpy as np
 from safe_control_gym.envs.gym_pybullet_drones.quadrotor import Quadrotor
 
+from safe_env.base import BarrierEnv
 
-class MyQuadrotor(Quadrotor):
+
+class MyQuadrotor(Quadrotor, BarrierEnv):
     def _set_observation_space(self):
         super(MyQuadrotor, self)._set_observation_space()
         self.observation_space = gym.spaces.Box(
@@ -25,6 +28,16 @@ class MyQuadrotor(Quadrotor):
         infeasible = abs(x) > 0.5 or abs(z - 1) > 0.5
         return {'feasible': feasible, 'infeasible': infeasible}
 
+    @staticmethod
+    def handcraft_barrier(obs):
+        xs, x_dot, zs, z_dot = obs[..., 0], obs[..., 1], obs[..., 2], obs[..., 3]
+        bx1 = -0.5 - xs - (xs > -0.5) * 0.2 * x_dot
+        bx2 = xs - 0.5 + (xs < 0.5) * 0.2 * x_dot
+        bz1 = 0.5 - zs - (zs > 0.5) * 0.2 * z_dot
+        bz2 = zs - 1.5 + (zs < 1.5) * 0.2 * z_dot
+        barrier = jnp.maximum(jnp.maximum(bx1, bx2), jnp.maximum(bz1, bz2))
+        return barrier
+
     def plot_map(self, ax, x_dot=0.5, z_dot=0):
         from matplotlib.patches import Rectangle
 
@@ -43,18 +56,14 @@ class MyQuadrotor(Quadrotor):
         rect = Rectangle((-0.1, 0.9), 0.2, 0.2, fill=False, color='k', linestyle='--')
         ax.add_patch(rect)
 
-        bx1 = -0.5 - xs - (xs > -0.5) * 0.2 * x_dot
-        bx2 = xs - 0.5 + (xs < 0.5) * 0.2 * x_dot
-        bz1 = 0.5 - zs - (zs > 0.5) * 0.2 * z_dot
-        bz2 = zs - 1.5 + (zs < 1.5) * 0.2 * z_dot
-        cbf = np.maximum(np.maximum(bx1, bx2), np.maximum(bz1, bz2))
+        barrier = self.handcraft_barrier(obs)
 
         return {
             'xs': xs,
             'ys': zs,
             'obs': obs,
             'y_true': None,
-            'handcraft_cbf': cbf,
+            'handcraft_barrier': barrier,
             'x_label': 'x [m]',
             'y_label': 'z [m]',
         }

@@ -3,8 +3,10 @@ from typing import Tuple
 import gym
 import numpy as np
 
+from safe_env.base import BarrierEnv
 
-class ReachAvoid(gym.Env):
+
+class ReachAvoid(BarrierEnv):
     def __init__(self):
         self.observation_space = gym.spaces.Box(low=-np.inf, high=np.inf, shape=(5,), dtype=np.float32)
         self.action_space = gym.spaces.Box(low=-1, high=1, shape=(2,), dtype=np.float32)
@@ -105,14 +107,14 @@ class ReachAvoid(gym.Env):
         hazard_angle = np.arctan2(-obs[..., 1], -obs[..., 0])
         heading_angle = np.arctan2(obs[..., 4], obs[..., 3])
         d_dot = -obs[..., 2] * np.cos(hazard_angle - heading_angle)
-        handcraft_cbf = 0.5 + self.hazard_size ** 2 - d ** 2 - 0.2 * d_dot
+        barrier = 0.5 + self.hazard_size ** 2 - d ** 2 - 0.2 * d_dot
 
         return {
             'xs': xs,
             'ys': ys,
             'obs': obs,
             'y_true': y_true,
-            'handcraft_cbf': handcraft_cbf,
+            'handcraft_barrier': barrier,
             'x_label': 'x [m]',
             'y_label': 'y [m]',
         }

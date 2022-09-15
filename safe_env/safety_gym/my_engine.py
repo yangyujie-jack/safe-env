@@ -1,11 +1,13 @@
 import gym
+import jax.numpy as jnp
 import numpy as np
 from safety_gym.envs.engine import Engine
 
+from safe_env.base import BarrierEnv
 from safe_env.safety_gym.generate_observations import normalize_obs, obs_lidar_pseudo2
 
 
-class MyEngine(Engine):
+class MyEngine(Engine, BarrierEnv):
     def build_observation_space(self):
         self.observation_space = gym.spaces.Box(
             -np.inf, np.inf, (self.lidar_num_bins + 5,), dtype=np.float32)
@@ -44,7 +46,20 @@ class MyEngine(Engine):
         infeasible = np.min(hazards_dist) <= self.hazards_size
         return {'feasible': feasible, 'infeasible': infeasible}
 
-    def plot_map(self, ax):
+    @staticmethod
+    def handcraft_barrier(obs):
+        lidar_num_bins = 36
+        rel_vel = obs[..., :2]
+        hazards_lidar = jnp.clip(obs[..., 2:2 + lidar_num_bins], a_min=1e-4)
+        bin_dist = -jnp.log(hazards_lidar)
+        bin_angle = jnp.linspace(0, 2 * np.pi, lidar_num_bins + 1)[:-1]
+        bin_proj_vec = jnp.stack((jnp.cos(bin_angle), jnp.sin(bin_angle)))
+        bin_dist_dot = -jnp.matmul(rel_vel.unsqueeze(-2), bin_proj_vec).squeeze(-2)
+        barrier = 0.1 - bin_dist - 0.1 * bin_dist_dot
+        barrier = jnp.max(barrier, dim=-1).values
+        return barrier
+
+    def plot_map(self, ax, robot_vel=(1, 0)):
         from matplotlib.patches import Circle
         from safe_env.safety_gym.generate_observations import generate_obs
 
@@ -58,6 +73,12 @@ class MyEngine(Engine):
         goal_pos = env.goal_pos[:2]
         hazards_pos = np.stack(env.hazards_pos, axis=0)[:, :2]
 
+        for pos in hazards_pos:
+            circle = Circle(pos, self.hazards_size, fill=False, linestyle='--', color='k')
+            ax.add_patch(circle)
+        circle = Circle(goal_pos, self.goal_size, fill=False, color='k')
+        ax.add_patch(circle)
+
         n = 101
         x_lim = (-2, 2)
         y_lim = (-2, 2)
@@ -65,7 +86,6 @@ class MyEngine(Engine):
         ys = np.linspace(y_lim[0], y_lim[1], n)
         xs, ys = np.meshgrid(xs, ys)
         robot_pos = np.stack((xs, ys), axis=2).reshape(-1, 2)
-        robot_vel = (1, 0)
         obs = generate_obs({
             **config,
             'goal_pos': goal_pos,
@@ -74,28 +94,14 @@ class MyEngine(Engine):
             'hazards_pos': hazards_pos,
         }).reshape(n, n, -1)
 
-        lidar_num_bins = config['lidar_num_bins']
-        rel_vel = obs[..., :2]
-        hazards_lidar = np.clip(obs[..., 2:2 + lidar_num_bins], a_min=1e-4, a_max=None)
-        bin_dist = -np.log(hazards_lidar)
-        bin_angle = np.linspace(0, 2 * np.pi, num=lidar_num_bins, endpoint=False)
-        bin_proj_vec = np.stack((np.cos(bin_angle), np.sin(bin_angle)), axis=0)
-        bin_dist_dot = -np.dot(rel_vel, bin_proj_vec)
-        cbf = 0.1 - bin_dist - 0.1 * bin_dist_dot
-        cbf = np.max(cbf, axis=-1)
-
-        for pos in hazards_pos:
-            circle = Circle(pos, self.hazards_size, fill=False, linestyle='--', color='k')
-            ax.add_patch(circle)
-        circle = Circle(goal_pos, self.goal_size, fill=False, color='k')
-        ax.add_patch(circle)
+        barrier = self.handcraft_barrier(obs)
 
         return {
             'xs': xs,
             'ys': ys,
             'obs': obs,
             'y_true': None,
-            'handcraft_cbf': cbf,
+            'handcraft_barrier': barrier,
             'x_label': 'x [m]',
             'y_label': 'y [m]',
         }

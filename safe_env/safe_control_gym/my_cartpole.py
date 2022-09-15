@@ -1,8 +1,10 @@
 import numpy as np
 from safe_control_gym.envs.gym_control.cartpole import CartPole
 
+from safe_env.base import BarrierEnv
 
-class MyCartPole(CartPole):
+
+class MyCartPole(CartPole, BarrierEnv):
     def step(self, action):
         feasible = self.goal_reached()
         infeasible = self.constraint_violated()
@@ -22,6 +24,13 @@ class MyCartPole(CartPole):
         c_value = self.constraints.get_values(self)
         return self.constraints.is_violated(self, c_value=c_value)
 
+    @staticmethod
+    def handcraft_barrier(obs):
+        theta, theta_dot = obs[..., 2], obs[..., 3]
+        theta_max, theta_dot_max = 0.2, 0.2
+        barrier = 0.5 * (-1 + theta ** 2 / theta_max ** 2 + theta_dot ** 2 / theta_dot_max ** 2)
+        return barrier
+
     def plot_map(self, ax):
         from matplotlib.patches import Rectangle
 
@@ -38,15 +47,14 @@ class MyCartPole(CartPole):
         rect = Rectangle((-0.2, -0.2), 0.4, 0.4, fill=False, color='k')
         ax.add_patch(rect)
 
-        theta_max, theta_dot_max = 0.2, 0.2
-        cbf = 0.5 * (-1 + theta ** 2 / theta_max ** 2 + theta_dot ** 2 / theta_dot_max ** 2)
+        barrier = self.handcraft_barrier(obs)
 
         return {
             'xs': theta,
             'ys': theta_dot,
             'obs': obs,
             'y_true': None,
-            'handcraft_cbf': cbf,
+            'handcraft_barrier': barrier,
             'x_label': 'theta [rad]',
             'y_label': 'theta_dot [rad/s]',
         }
