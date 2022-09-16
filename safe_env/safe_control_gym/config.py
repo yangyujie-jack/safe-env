@@ -120,10 +120,10 @@ quadrotor_config = {
     'constraints': [
         {
             'constraint_form': 'bounded_constraint',
-            'lower_bounds': [-0.5, 0.5],
-            'upper_bounds': [0.5, 1.5],
             'constrained_variable': 'state',
             'active_dims': [0, 2],
+            'lower_bounds': [-0.5, 0.5],
+            'upper_bounds': [0.5, 1.5],
         }
     ],
     'done_on_violation': False,

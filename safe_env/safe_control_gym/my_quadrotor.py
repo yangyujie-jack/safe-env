@@ -38,7 +38,7 @@ class MyQuadrotor(Quadrotor, BarrierEnv):
         zs = np.linspace(0.3, 1.7, 101, dtype=np.float32)
         xs, zs = np.meshgrid(xs, zs)
 
-        obs = np.zeros((*xs.shape, 6), dtype=np.float32)
+        obs = np.zeros((*xs.shape, 12), dtype=np.float32)
         obs[..., 0] = xs
         obs[..., 1] = x_dot
         obs[..., 2] = zs
