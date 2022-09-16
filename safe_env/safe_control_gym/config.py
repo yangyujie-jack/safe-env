@@ -132,7 +132,7 @@ quadrotor_config = {
     'quad_type': 2,
     'obs_goal_horizon': 1,
     'rew_exponential': True,
-    'done_on_out_of_bound': False,
+    'done_on_out_of_bound': True,
 }
 
 quadrotor_random_config = {
