@@ -1,4 +1,3 @@
-import gym
 import jax.numpy as jnp
 import numpy as np
 from safe_control_gym.envs.gym_pybullet_drones.quadrotor import Quadrotor
@@ -7,12 +6,6 @@ from safe_env.base import BarrierEnv
 
 
 class MyQuadrotor(Quadrotor, BarrierEnv):
-    def _set_observation_space(self):
-        super(MyQuadrotor, self)._set_observation_space()
-        self.observation_space = gym.spaces.Box(
-            low=-np.finfo(np.float32).max, high=np.finfo(np.float32).max,
-            shape=self.observation_space.shape, dtype=np.float32)
-
     def step(self, action):
         feasibility_info = self.get_feasibility_info()
         obs, rew, done, info = super(MyQuadrotor, self).step(action)

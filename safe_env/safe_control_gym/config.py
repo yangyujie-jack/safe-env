@@ -131,6 +131,7 @@ quadrotor_config = {
     # custom
     'quad_type': 2,
     'obs_goal_horizon': 1,
+    'rew_exponential': True,
     'done_on_out_of_bound': False,
 }
 
