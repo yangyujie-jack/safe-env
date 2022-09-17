@@ -54,9 +54,9 @@ class MyEngine(Engine, BarrierEnv):
         bin_dist = -jnp.log(hazards_lidar)
         bin_angle = jnp.linspace(0, 2 * np.pi, lidar_num_bins + 1)[:-1]
         bin_proj_vec = jnp.stack((jnp.cos(bin_angle), jnp.sin(bin_angle)))
-        bin_dist_dot = -jnp.matmul(rel_vel.unsqueeze(-2), bin_proj_vec).squeeze(-2)
+        bin_dist_dot = -jnp.matmul(rel_vel[..., jnp.newaxis, :], bin_proj_vec)[..., 0, :]
         barrier = 0.1 - bin_dist - 0.1 * bin_dist_dot
-        barrier = jnp.max(barrier, dim=-1).values
+        barrier = jnp.max(barrier, axis=-1)
         return barrier
 
     def plot_map(self, ax, robot_vel=(1, 0)):

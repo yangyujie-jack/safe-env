@@ -46,8 +46,6 @@ class MyQuadrotor(Quadrotor, BarrierEnv):
 
         rect = Rectangle((-0.5, 0.5), 1.0, 1.0, fill=False, color='k')
         ax.add_patch(rect)
-        rect = Rectangle((-0.1, 0.9), 0.2, 0.2, fill=False, color='k', linestyle='--')
-        ax.add_patch(rect)
 
         barrier = self.handcraft_barrier(obs)
 
