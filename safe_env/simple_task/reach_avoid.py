@@ -101,13 +101,13 @@ class ReachAvoid(BarrierEnv):
         circle = Circle((0.0, 0.0), self.hazard_size, fill=False, linestyle='--', color='k')
         ax.add_patch(circle)
 
-        y_true = 1 - float(avoidable)
+        y_true = 1 - avoidable.astype(np.float32)
 
         d = np.linalg.norm(obs[..., :2], axis=-1)
         hazard_angle = np.arctan2(-obs[..., 1], -obs[..., 0])
         heading_angle = np.arctan2(obs[..., 4], obs[..., 3])
         d_dot = -obs[..., 2] * np.cos(hazard_angle - heading_angle)
-        barrier = 0.5 + self.hazard_size ** 2 - d ** 2 - 0.2 * d_dot
+        barrier = 0.4 + self.hazard_size - d - 0.3 * d_dot
 
         return {
             'xs': xs,
