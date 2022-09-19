@@ -35,7 +35,7 @@ def register():
         id='CartPole-v1',
         entry_point=MyCartPole,
         kwargs=cartpole_random_config,
-        max_episode_steps=10
+        max_episode_steps=50
     )
 
     gym.register(
@@ -48,7 +48,7 @@ def register():
         id='Quadrotor-v1',
         entry_point=MyQuadrotor,
         kwargs=quadrotor_random_config,
-        max_episode_steps=10
+        max_episode_steps=50
     )
 
     # safety gym

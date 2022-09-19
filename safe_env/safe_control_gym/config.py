@@ -54,13 +54,13 @@ cartpole_random_config = {
         },
         'init_theta': {
             'distrib': 'uniform',
-            'low': -0.2,
-            'high': 0.2
+            'low': -0.3,
+            'high': 0.3
         },
         'init_theta_dot': {
             'distrib': 'uniform',
-            'low': -0.2,
-            'high': 0.2
+            'low': -0.3,
+            'high': 0.3
         },
     },
 }
@@ -140,8 +140,8 @@ quadrotor_random_config = {
     'init_state_randomization_info': {
         'init_x': {
             'distrib': 'uniform',
-            'low': -0.5,
-            'high': 0.5
+            'low': -0.7,
+            'high': 0.7
         },
         'init_x_dot': {
             'distrib': 'uniform',
@@ -150,8 +150,8 @@ quadrotor_random_config = {
         },
         'init_z': {
             'distrib': 'uniform',
-            'low': 0.5,
-            'high': 1.5
+            'low': 0.3,
+            'high': 1.7
         },
         'init_z_dot': {
             'distrib': 'uniform',

@@ -21,6 +21,14 @@ class MyQuadrotor(Quadrotor, BarrierEnv):
         infeasible = abs(x) > 0.5 or abs(z - 1) > 0.5
         return {'feasible': feasible, 'infeasible': infeasible}
 
+    @property
+    def barrier_input_dim(self):
+        return 6
+
+    @staticmethod
+    def preprocess(obs):
+        return obs[..., :6]
+
     @staticmethod
     def handcraft_barrier(obs):
         xs, x_dot, zs, z_dot = obs[..., 0], obs[..., 1], obs[..., 2], obs[..., 3]
@@ -38,7 +46,7 @@ class MyQuadrotor(Quadrotor, BarrierEnv):
         zs = np.linspace(0.3, 1.7, 101, dtype=np.float32)
         xs, zs = np.meshgrid(xs, zs)
 
-        obs = np.zeros((*xs.shape, 12), dtype=np.float32)
+        obs = np.zeros((*xs.shape, 6), dtype=np.float32)
         obs[..., 0] = xs
         obs[..., 1] = x_dot
         obs[..., 2] = zs
