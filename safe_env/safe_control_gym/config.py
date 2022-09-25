@@ -41,7 +41,7 @@ cartpole_config = {
     'rew_state_weight': [1, 0, 0, 0],
     'rew_act_weight': 0.001,
     'rew_exponential': True,
-    'done_on_out_of_bound': False,
+    'done_on_out_of_bound': True,
 }
 
 cartpole_random_config = {
