@@ -55,6 +55,6 @@ class MyCartPole(CartPole, BarrierEnv):
             'obs': obs,
             'y_true': None,
             'handcraft_barrier': barrier,
-            'x_label': 'theta [rad]',
-            'y_label': 'theta_dot [rad/s]',
+            'x_label': r'$\theta$',
+            'y_label': r'$\dot{\theta}$',
         }

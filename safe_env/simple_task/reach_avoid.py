@@ -115,6 +115,6 @@ class ReachAvoid(BarrierEnv):
             'obs': obs,
             'y_true': y_true,
             'handcraft_barrier': barrier,
-            'x_label': 'x [m]',
-            'y_label': 'y [m]',
+            'x_label': 'x',
+            'y_label': 'y',
         }

@@ -59,6 +59,6 @@ class DoubleIntegrator(BarrierEnv):
             'obs': obs,
             'y_true': y_true,
             'handcraft_barrier': barrier,
-            'x_label': '$x_1$',
-            'y_label': '$x_2$',
+            'x_label': 's',
+            'y_label': 'v',
         }

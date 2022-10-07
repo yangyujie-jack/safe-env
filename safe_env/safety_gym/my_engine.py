@@ -59,13 +59,12 @@ class MyEngine(Engine, BarrierEnv):
         barrier = jnp.max(barrier, axis=-1)
         return barrier
 
-    def plot_map(self, ax, robot_vel=(1, 0)):
+    def plot_map(self, ax, robot_rot=0, robot_vel=(1, 0)):
         from matplotlib.patches import Circle
         from safe_env.safety_gym.generate_observations import generate_obs
 
         config = {
             **self.config,
-            'robot_rot': 0,
             '_seed': 0,
         }
         env = MyEngine(config)
@@ -90,6 +89,7 @@ class MyEngine(Engine, BarrierEnv):
             **config,
             'goal_pos': goal_pos,
             'robot_pos': robot_pos,
+            'robot_rot': robot_rot,
             'robot_vel': robot_vel,
             'hazards_pos': hazards_pos,
         }).reshape(n, n, -1)
@@ -102,6 +102,6 @@ class MyEngine(Engine, BarrierEnv):
             'obs': obs,
             'y_true': None,
             'handcraft_barrier': barrier,
-            'x_label': 'x [m]',
-            'y_label': 'y [m]',
+            'x_label': 'x',
+            'y_label': 'y',
         }

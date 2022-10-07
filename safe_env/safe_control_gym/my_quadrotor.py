@@ -37,6 +37,8 @@ class MyQuadrotor(Quadrotor, BarrierEnv):
         bz1 = 0.5 - zs - (zs > 0.5) * 0.2 * z_dot
         bz2 = zs - 1.5 + (zs < 1.5) * 0.2 * z_dot
         barrier = jnp.maximum(jnp.maximum(bx1, bx2), jnp.maximum(bz1, bz2))
+        # barrier = (((xs + 0.1 * x_dot) / (0.5 - 0.1 * jnp.minimum(jnp.abs(x_dot), 4))) ** 6 +
+        #            ((zs - 1 + 0.1 * z_dot) / (0.5 - 0.1 * jnp.minimum(jnp.abs(z_dot), 4))) ** 6) ** (1 / 6) - 1
         return barrier
 
     def plot_map(self, ax, x_dot=0.5, z_dot=0):
@@ -63,6 +65,6 @@ class MyQuadrotor(Quadrotor, BarrierEnv):
             'obs': obs,
             'y_true': None,
             'handcraft_barrier': barrier,
-            'x_label': 'x [m]',
-            'y_label': 'z [m]',
+            'x_label': 'x',
+            'y_label': 'z',
         }
