@@ -7,7 +7,7 @@ from safe_env.safe_control_gym.my_quadrotor import MyQuadrotor
 from safe_env.safety_gym.config import point_goal_config, car_goal_config
 from safe_env.safety_gym.my_engine import MyEngine
 from safe_env.simple_task.double_integrator import DoubleIntegrator
-from safe_env.simple_task.reach_avoid import ReachAvoid
+from safe_env.simple_task.point_robot import PointRobot
 
 
 def register():
@@ -19,8 +19,8 @@ def register():
     )
 
     gym.register(
-        id='ReachAvoid-v0',
-        entry_point=ReachAvoid,
+        id='PointRobot-v0',
+        entry_point=PointRobot,
         max_episode_steps=10
     )
 

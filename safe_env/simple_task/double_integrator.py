@@ -58,7 +58,7 @@ class DoubleIntegrator(BarrierEnv):
             'ys': x2_grid,
             'obs': obs,
             'y_true': y_true,
-            'handcraft_barrier': barrier,
+            'cbf': barrier,
             'x_label': r'$\mathrm{x_1}$',
             'y_label': r'$\mathrm{x_2}$',
         }

@@ -6,7 +6,7 @@ import numpy as np
 from safe_env.base import BarrierEnv
 
 
-class ReachAvoid(BarrierEnv):
+class PointRobot(BarrierEnv):
     def __init__(self):
         self.observation_space = gym.spaces.Box(low=-np.inf, high=np.inf, shape=(5,), dtype=np.float32)
         self.action_space = gym.spaces.Box(low=-1, high=1, shape=(2,), dtype=np.float32)
@@ -114,7 +114,7 @@ class ReachAvoid(BarrierEnv):
             'ys': ys,
             'obs': obs,
             'y_true': y_true,
-            'handcraft_barrier': barrier,
+            'cbf': barrier,
             'x_label': 'x',
             'y_label': 'y',
         }

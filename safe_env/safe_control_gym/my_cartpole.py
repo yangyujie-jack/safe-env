@@ -44,7 +44,7 @@ class MyCartPole(CartPole, BarrierEnv):
         obs[..., 2] = theta
         obs[..., 3] = theta_dot
 
-        rect = Rectangle((-0.2, -0.2), 0.4, 0.4, fill=False, color='k')
+        rect = Rectangle((-0.2, -0.2), 0.4, 0.4, fill=False, linestyle='--', color='k')
         ax.add_patch(rect)
 
         barrier = self.handcraft_barrier(obs)
@@ -54,7 +54,7 @@ class MyCartPole(CartPole, BarrierEnv):
             'ys': theta_dot,
             'obs': obs,
             'y_true': None,
-            'handcraft_barrier': barrier,
+            'cbf': barrier,
             'x_label': r'$\theta$',
             'y_label': r'$\dot{\theta}$',
         }

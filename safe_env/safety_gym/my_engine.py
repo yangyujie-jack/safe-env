@@ -75,8 +75,6 @@ class MyEngine(Engine, BarrierEnv):
         for pos in hazards_pos:
             circle = Circle(pos, self.hazards_size, fill=False, linestyle='--', color='k')
             ax.add_patch(circle)
-        circle = Circle(goal_pos, self.goal_size, fill=False, color='k')
-        ax.add_patch(circle)
 
         n = 101
         x_lim = (-2, 2)
@@ -101,7 +99,7 @@ class MyEngine(Engine, BarrierEnv):
             'ys': ys,
             'obs': obs,
             'y_true': None,
-            'handcraft_barrier': barrier,
+            'cbf': barrier,
             'x_label': 'x',
             'y_label': 'y',
         }

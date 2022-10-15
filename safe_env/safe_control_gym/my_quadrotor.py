@@ -54,7 +54,7 @@ class MyQuadrotor(Quadrotor, BarrierEnv):
         obs[..., 2] = zs
         obs[..., 3] = z_dot
 
-        rect = Rectangle((-0.5, 0.5), 1.0, 1.0, fill=False, color='k')
+        rect = Rectangle((-0.5, 0.5), 1.0, 1.0, fill=False, linestyle='--', color='k')
         ax.add_patch(rect)
 
         barrier = self.handcraft_barrier(obs)
@@ -64,7 +64,7 @@ class MyQuadrotor(Quadrotor, BarrierEnv):
             'ys': zs,
             'obs': obs,
             'y_true': None,
-            'handcraft_barrier': barrier,
+            'cbf': barrier,
             'x_label': 'x',
             'y_label': 'z',
         }
